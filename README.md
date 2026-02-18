@@ -26,8 +26,8 @@ I’m a passionate web developer who loves building modern, responsive, and user
 
 ## 💼 Projects
 
-### 📌 Project 1 — *Your Project Name*
-🔗 **Live:** https://your-project-link.com  
+### 📌 Project 1 — *🔗 Portfolio*
+🔗 **Live:** https://govindx.qzz.io  
 📌 **Code:** https://github.com/Govind-Nagarx/project-repo  
 A brief description of what this project does, the technologies used, and any cool features you added.
 
@@ -44,7 +44,7 @@ A brief description of what this project does, the technologies used, and any co
 
 ## 📫 Connect With Me
 
-📬 Email: your-email@example.com  
-🔗 LinkedIn: https://linkedin.com/in/yourprofile  
-🔗 Portfolio (if deployed): https://your-portfolio.com
+📬 Email: govindnagar523@gmail.com  
+🔗 LinkedIn: https://linkedin.com/in/govind-nagar
+🔗 Portfolio (if deployed): https://govindx.qzz.io
 
