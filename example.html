@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Realistic Robot Cat</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 50% 45%, #101b2a, #03060b 70%);
+}
+
+/* ================= ROBOT CAT ================= */
+
+#robotCat {
+    position: fixed;
+
+    width: 190px;
+    height: auto;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+
+    z-index: 9999;
+
+    object-fit: contain;
+
+    /* smooth shadow */
+    filter:
+        drop-shadow(0 12px 12px rgba(0,0,0,.6))
+        drop-shadow(0 0 12px rgba(0,220,255,.18));
+
+    transition: transform .18s ease;
+}
+
+/* Walking bounce */
+#robotCat.walking {
+    animation: robotWalk .22s infinite alternate ease-in-out;
+}
+
+@keyframes robotWalk {
+
+    0% {
+        margin-top: 0;
+    }
+
+    100% {
+        margin-top: -5px;
+    }
+}
+
+
+/* ================= CURSOR GLOW ================= */
+
+#cursorGlow {
+    position: fixed;
+
+    width: 18px;
+    height: 18px;
+
+    border-radius: 50%;
+
+    border: 2px solid #00eaff;
+
+    transform: translate(-50%, -50%);
+
+    pointer-events: none;
+
+    box-shadow:
+        0 0 8px #00eaff,
+        0 0 22px rgba(0,234,255,.55);
+
+    z-index: 9998;
+}
+
+
+/* ================= MOBILE ================= */
+
+@media(max-width:600px){
+
+    #robotCat {
+        width: 130px;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<!--
+    Apni realistic robot cat image ka naam:
+    robot-cat.png
+-->
+<img
+    id="robotCat"
+    src="robot-cat.png"
+    alt="Robot Cat"
+>
+
+<div id="cursorGlow"></div>
+
+
+<script>
+
+const cat = document.getElementById("robotCat");
+const cursor = document.getElementById("cursorGlow");
+
+
+/* Mouse position */
+
+let mouseX = window.innerWidth / 2;
+let mouseY = window.innerHeight / 2;
+
+
+/* Robot position */
+
+let catX = mouseX - 150;
+let catY = mouseY;
+
+let previousX = catX;
+let previousY = catY;
+
+
+/* Direction */
+
+let facingRight = true;
+
+
+/* ================= MOUSE ================= */
+
+document.addEventListener("mousemove", function(e){
+
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+
+    cursor.style.left = mouseX + "px";
+    cursor.style.top = mouseY + "px";
+
+});
+
+
+/* ================= ANIMATION ================= */
+
+function animate(){
+
+    /*
+        Smooth follow
+    */
+
+    const speed = 0.055;
+
+    catX += (mouseX - catX) * speed;
+    catY += (mouseY - catY) * speed;
+
+
+    /*
+        Cat cursor ke bilkul upar nahi jayegi.
+        Thoda piche rahegi.
+    */
+
+    const dx = mouseX - catX;
+    const dy = mouseY - catY;
+
+    const distance = Math.sqrt(
+        dx * dx + dy * dy
+    );
+
+    const followDistance = 95;
+
+
+    if(distance > followDistance){
+
+        const angle = Math.atan2(dy, dx);
+
+        catX =
+            mouseX -
+            Math.cos(angle) *
+            followDistance;
+
+        catY =
+            mouseY -
+            Math.sin(angle) *
+            followDistance;
+
+    }
+
+
+    /*
+        Screen par position
+    */
+
+    cat.style.left = catX + "px";
+    cat.style.top = catY + "px";
+
+
+    /*
+        Movement calculate
+    */
+
+    const movement =
+        Math.abs(catX - previousX) +
+        Math.abs(catY - previousY);
+
+
+    if(movement > 0.12){
+
+        cat.classList.add("walking");
+
+    }else{
+
+        cat.classList.remove("walking");
+
+    }
+
+
+    /*
+        IMPORTANT:
+        Cat ko upside-down nahi karna.
+
+        Sirf LEFT / RIGHT flip.
+    */
+
+    if(mouseX < catX){
+
+        if(facingRight){
+
+            facingRight = false;
+
+            cat.style.transform =
+                "translate(-50%, -50%) scaleX(-1)";
+        }
+
+    }else{
+
+        if(!facingRight){
+
+            facingRight = true;
+
+            cat.style.transform =
+                "translate(-50%, -50%) scaleX(1)";
+        }
+
+    }
+
+
+    previousX = catX;
+    previousY = catY;
+
+
+    requestAnimationFrame(animate);
+}
+
+animate();
+
+</script>
+
+</body>
+</html>
